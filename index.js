@@ -9,8 +9,9 @@ async function getWeather() {
         return;
     }
 
-    const currentWeatherUrl = `http://localhost:3000/weather?city=${city}`;
-    const forecastUrl = `http://localhost:3000/forecast?city=${city}`;
+    const currentWeatherUrl = `https://weatherapp-0irq.onrender.com/weather?city=${city}`;
+    const forecastUrl = `https://weatherapp-0irq.onrender.com/forecast?city=${city}`;
+
 
     try {
         const currentResponse = await fetch(currentWeatherUrl);
