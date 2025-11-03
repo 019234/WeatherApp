@@ -1,40 +1,34 @@
 
 console.log("Weather app script loaded!");
 
-
-function getWeather() {
-
-    const apiKey = 'bb824edbb02db5c2e6e68acf8098f26c';
+async function getWeather() {
     const city = encodeURIComponent(document.getElementById('city').value.trim());
 
     if (!city) {
         alert('please enter a City');
         return;
     }
-    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
 
-    fetch(currentWeatherUrl)
-        .then(response => response.json())
-        .then(data => {
-            displayWeather(data);
-        })
-        .catch(error => {
-            console.error('error fetching current weather data', error);
-            alert('Error fetching current weather data. Please try again.');
-        })
+    const currentWeatherUrl = `http://localhost:3000/weather?city=${city}`;
+    const forecastUrl = `http://localhost:3000/forecast?city=${city}`;
 
-    fetch(forecastUrl)
-        .then(response => response.json())
-        .then(data => {
-            displayHourlyForecast(data.list);
-        })
-        .catch(error => {
-            console.error('error fetching hourly forecast data', error);
-            alert('Error fetching hourly forecast data. Please try again.');
-        })
+    try {
+        const currentResponse = await fetch(currentWeatherUrl);
+        const forecastResponse = await fetch(forecastUrl);
 
+        const currentData = await currentResponse.json();
+        const forecastData = await forecastResponse.json();
+
+        console.log('Current weather:', currentData);
+        console.log('Forecast:', forecastData);
+
+        displayWeather(currentData);
+        displayHourlyForecast(forecastData.list);
+    } catch (error) {
+        console.error('Error fetching weather data:', error);
+    }
 }
+
 
 function displayWeather(data) {
     const tempDivInfo = document.getElementById('temp-div');
